@@ -34,8 +34,8 @@
     font-family: var(--f-display);
     background: var(--bg);
     color: var(--ink);
-    line-height: 1.55;
-    font-size: 17px;
+    line-height: 1.6;
+    font-size: 20px;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -117,7 +117,7 @@
     font-size: 10px;
     margin-bottom: 6px;
   }
-  .hero__meta dd { color: var(--ink-2); }
+  .hero__meta dd { color: var(--ink-2); font-size: 15px; }
   @media (max-width: 720px) {
     .hero { padding: 64px 0 48px; }
     .hero__meta { grid-template-columns: repeat(2, 1fr); }
@@ -159,7 +159,7 @@
   }
   .toc__title {
     font-family: var(--f-display);
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 500;
   }
   .toc__title a {
@@ -211,9 +211,9 @@
   .section__lede {
     font-family: var(--f-display);
     font-style: italic;
-    font-size: 22px;
+    font-size: 26px;
     color: var(--ink-2);
-    max-width: 720px;
+    max-width: 760px;
     margin-bottom: 48px;
     line-height: 1.5;
   }
@@ -221,9 +221,9 @@
   /* ============ PROSE ============ */
   .prose { max-width: 760px; }
   .prose p {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     color: var(--ink);
-    font-size: 18px;
+    font-size: 22px;
     line-height: 1.7;
   }
   .prose p + p { text-indent: 0; }
@@ -254,7 +254,7 @@
   }
   .meta-grid dd {
     font-family: var(--f-display);
-    font-size: 19px;
+    font-size: 22px;
     color: var(--ink);
   }
   @media (max-width: 720px) {
@@ -323,7 +323,7 @@
   }
   .callout__text {
     font-family: var(--f-display);
-    font-size: 18px;
+    font-size: 21px;
     line-height: 1.6;
     color: var(--ink);
   }
@@ -354,12 +354,12 @@
   }
   .step__title {
     font-family: var(--f-display);
-    font-size: 22px;
+    font-size: 25px;
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .step__desc {
-    font-size: 16px;
+    font-size: 19px;
     color: var(--ink-2);
     line-height: 1.65;
   }
@@ -383,11 +383,11 @@
     width: 100%;
     border-collapse: collapse;
     margin: 32px 0;
-    font-size: 15px;
+    font-size: 17px;
   }
   th, td {
     text-align: left;
-    padding: 14px 18px;
+    padding: 16px 18px;
     border-bottom: 1px solid var(--line);
     vertical-align: top;
   }
@@ -429,12 +429,12 @@
   }
   .tilt__title {
     font-family: var(--f-display);
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .tilt__text {
-    font-size: 16px;
+    font-size: 19px;
     color: var(--ink);
     line-height: 1.6;
   }
@@ -448,12 +448,13 @@
   footer .sig {
     font-family: var(--f-display);
     font-style: italic;
-    font-size: 20px;
+    font-size: 23px;
     color: var(--ink-2);
     margin-bottom: 24px;
-    max-width: 600px;
+    max-width: 640px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.5;
   }
   footer .meta-line {
     font-family: var(--f-mono);
@@ -497,6 +498,14 @@
     .big-num { font-size: 140px; top: 40px; right: 16px; }
     .container { padding: 0 20px; }
     .section__title { font-size: 36px; }
+    body { font-size: 18px; }
+    .prose p { font-size: 19px; }
+    .section__lede { font-size: 22px; }
+    .callout__text { font-size: 19px; }
+    .step__title { font-size: 22px; }
+    .step__desc { font-size: 17px; }
+    .tilt__title { font-size: 21px; }
+    .tilt__text { font-size: 17px; }
   }
 </style>
 </head>
@@ -723,7 +732,7 @@
       </svg>
     </div>
 
-    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Як це працює на практиці</h3>
+    <h3 style="font-family: var(--f-display); font-size: 32px; font-weight: 500; margin: 56px 0 20px; letter-spacing: -0.01em;">Як це працює на практиці</h3>
 
     <ol class="steps">
       <li>
@@ -854,8 +863,8 @@
       </svg>
     </div>
 
-    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Анатомія форми</h3>
-    <p class="prose" style="margin-bottom: 24px;">Найгірше, що можна зробити з лідген-формою — попросити 12 полів. Найкраще — попросити рівно стільки, скільки потрібно щоб зрозуміти: <em>чи варто витрачати 30 хв на цю людину</em>.</p>
+    <h3 style="font-family: var(--f-display); font-size: 32px; font-weight: 500; margin: 56px 0 20px; letter-spacing: -0.01em;">Анатомія форми</h3>
+    <p class="prose" style="font-size: 22px; line-height: 1.7; margin-bottom: 32px; max-width: 760px;">Найгірше, що можна зробити з лідген-формою — попросити 12 полів. Найкраще — попросити рівно стільки, скільки потрібно щоб зрозуміти: <em>чи варто витрачати 30 хв на цю людину</em>.</p>
 
     <table>
       <thead>
@@ -948,7 +957,7 @@
       </svg>
     </div>
 
-    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">4 критерії кваліфікації</h3>
+    <h3 style="font-family: var(--f-display); font-size: 32px; font-weight: 500; margin: 56px 0 20px; letter-spacing: -0.01em;">4 критерії кваліфікації</h3>
 
     <table>
       <thead>
@@ -1082,7 +1091,7 @@
       </svg>
     </div>
 
-    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Психологія розмови</h3>
+    <h3 style="font-family: var(--f-display); font-size: 32px; font-weight: 500; margin: 56px 0 20px; letter-spacing: -0.01em;">Психологія розмови</h3>
 
     <ol class="steps">
       <li>
@@ -1217,8 +1226,8 @@
       </svg>
     </div>
 
-    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Два матеріальних продукти</h3>
-    <p class="prose" style="margin-bottom: 24px;">Це <strong>головна відмінність</strong> від pay-per-session. Терапевти продають години розмови. Ви продаєте <em>два документи</em>, упаковані в 90 днів супроводу.</p>
+    <h3 style="font-family: var(--f-display); font-size: 32px; font-weight: 500; margin: 56px 0 20px; letter-spacing: -0.01em;">Два матеріальних продукти</h3>
+    <p class="prose" style="font-size: 22px; line-height: 1.7; margin-bottom: 32px; max-width: 760px;">Це <strong>головна відмінність</strong> від pay-per-session. Терапевти продають години розмови. Ви продаєте <em>два документи</em>, упаковані в 90 днів супроводу.</p>
 
     <table>
       <thead>
