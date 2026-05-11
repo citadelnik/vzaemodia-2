@@ -1,440 +1,1358 @@
 <!DOCTYPE html>
-<html lang="uk" class="scroll-smooth">
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Взаємодія | Центр вирішення критичних станів</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-brown': '#5B5828',
-                        'primary-brown-dark': '#4A4720',
-                        'accent-orange': '#FF8C00',
-                        'accent-orange-light': '#FFA500',
-                        'off-white': '#FDFCF0',
-                        'dark-gray': '#1A1A1A',
-                        'chat-tg': '#0088cc',
-                        'chat-viber': '#7360f2',
-                        'chat-wa': '#25d366'
-                    },
-                    fontFamily: {
-                        serif: ['"Cormorant Garamond"', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vzaiemodiia — Operational Manual · 5 процесів</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0e0c;
+    --bg-2:    #0f1714;
+    --bg-3:    #131a17;
+    --ink:     #f2ede3;
+    --ink-2:   #b4aea2;
+    --ink-3:   #6e6a62;
+    --gold:    #c9a35b;
+    --gold-2:  #8b6f2e;
+    --red:     #dc2626;
+    --red-2:   #991b1b;
+    --line:    #1f2a26;
+    --line-2:  #2b3833;
 
-    <style>
-        body {
-            background-color: #FDFCF0;
-            color: #1A1A1A;
-        }
-        
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 400px;
-        }
+    --f-display: 'Cormorant Garamond', Georgia, serif;
+    --f-mono:    'DM Mono', 'SF Mono', Menlo, monospace;
+  }
 
-        .chart-container-small {
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 250px;
-            max-height: 300px;
-        }
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        @media (min-width: 768px) {
-            .chart-container { height: 400px; }
-            .chart-container-small { height: 300px; }
-        }
+  html { scroll-behavior: smooth; }
 
-        .rationale-panel {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease-out;
-            opacity: 0;
-            background-color: rgba(255, 140, 0, 0.1);
-            border-left: 4px solid #FF8C00;
-        }
-        
-        .rationale-panel.active {
-            max-height: 800px;
-            opacity: 1;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-        }
+  body {
+    font-family: var(--f-display);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    font-size: 17px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
 
-        input[type="checkbox"] {
-            accent-color: #FF8C00;
-            width: 1.25rem;
-            height: 1.25rem;
-            cursor: pointer;
-        }
+  /* Subtle grain overlay for depth */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.04;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(201,163,91,0.4) 0, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(201,163,91,0.3) 0, transparent 50%);
+  }
 
-        .specialist-card img {
-            filter: grayscale(100%);
-            transition: filter 0.5s ease;
-        }
-        .specialist-card:hover img {
-            filter: grayscale(0%);
-        }
+  ::selection { background: var(--gold); color: var(--bg); }
 
-        .chat-screenshot {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            padding: 15px;
-            position: relative;
-            max-width: 280px;
-        }
-    </style>
+  /* ============ LAYOUT ============ */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 96px 0 64px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero__eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .hero__eyebrow::before {
+    content: '';
+    width: 44px; height: 1px;
+    background: var(--gold);
+  }
+  .hero__title {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .hero__title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .hero__meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .hero__meta dt {
+    color: var(--ink-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+  .hero__meta dd { color: var(--ink-2); }
+  @media (max-width: 720px) {
+    .hero { padding: 64px 0 48px; }
+    .hero__meta { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ============ TOC ============ */
+  .toc {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .toc h2 {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li {
+    counter-increment: toc;
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+    display: grid;
+    grid-template-columns: 60px 1fr 200px;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: '0' counter(toc);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+  .toc__title {
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 500;
+  }
+  .toc__title a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .toc__title a:hover { color: var(--gold); }
+  .toc__owner {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.12em;
+    text-align: right;
+  }
+  @media (max-width: 720px) {
+    .toc li { grid-template-columns: 40px 1fr; }
+    .toc__owner { display: none; }
+  }
+
+  /* ============ SECTIONS ============ */
+  section { padding: 80px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+
+  .section__num {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section__num::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--gold);
+  }
+  .section__title {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .section__lede {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-2);
+    max-width: 720px;
+    margin-bottom: 48px;
+    line-height: 1.5;
+  }
+
+  /* ============ PROSE ============ */
+  .prose { max-width: 760px; }
+  .prose p {
+    margin-bottom: 20px;
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  .prose p + p { text-indent: 0; }
+  .prose strong { color: var(--gold); font-weight: 500; }
+  .prose em { font-style: italic; color: var(--ink-2); }
+
+  /* ============ META GRID (process meta) ============ */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 32px 0 48px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .meta-grid > div {
+    padding: 20px 24px;
+    border-right: 1px solid var(--line);
+  }
+  .meta-grid > div:last-child { border-right: none; }
+  .meta-grid dt {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .meta-grid dd {
+    font-family: var(--f-display);
+    font-size: 19px;
+    color: var(--ink);
+  }
+  @media (max-width: 720px) {
+    .meta-grid { grid-template-columns: repeat(2, 1fr); }
+    .meta-grid > div:nth-child(2) { border-right: none; }
+    .meta-grid > div:nth-child(1), .meta-grid > div:nth-child(2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ============ DIAGRAM FRAME ============ */
+  .diagram {
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    padding: 40px 32px;
+    margin: 48px 0;
+    position: relative;
+  }
+  .diagram::before {
+    content: 'SCHEMA';
+    position: absolute;
+    top: -1px; left: 24px;
+    background: var(--bg);
+    padding: 0 12px;
+    transform: translateY(-50%);
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    color: var(--gold);
+  }
+  .diagram svg { width: 100%; height: auto; display: block; }
+
+  /* SVG default styles inside diagrams */
+  .diagram .node-fill   { fill: var(--bg-3); stroke: var(--gold-2); stroke-width: 0.5; }
+  .diagram .node-fill-2 { fill: #1a221f; stroke: var(--gold-2); stroke-width: 0.5; }
+  .diagram .node-fill-warm { fill: #1e1a14; stroke: var(--gold); stroke-width: 0.5; }
+  .diagram .node-fill-danger { fill: #1f1313; stroke: var(--red-2); stroke-width: 0.5; }
+  .diagram .node-fill-success { fill: #131f1a; stroke: #2d6e58; stroke-width: 0.5; }
+
+  .diagram .t-title { font-family: var(--f-display); font-size: 17px; font-weight: 500; fill: var(--ink); }
+  .diagram .t-sub   { font-family: var(--f-mono); font-size: 10px; fill: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .diagram .t-mono  { font-family: var(--f-mono); font-size: 11px; fill: var(--ink-2); }
+  .diagram .t-gold  { fill: var(--gold); }
+  .diagram .t-red   { fill: var(--red); }
+  .diagram .arr     { stroke: var(--ink-3); stroke-width: 1; fill: none; }
+  .diagram .arr-gold { stroke: var(--gold); stroke-width: 1; fill: none; }
+  .diagram .arr-dashed { stroke: var(--gold); stroke-width: 0.5; fill: none; stroke-dasharray: 4 4; }
+
+  /* ============ CALLOUTS ============ */
+  .callout {
+    border-left: 3px solid var(--gold);
+    background: var(--bg-2);
+    padding: 24px 28px;
+    margin: 32px 0;
+    max-width: 820px;
+  }
+  .callout--danger { border-left-color: var(--red); }
+  .callout--danger .callout__label { color: var(--red); }
+  .callout__label {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .callout__text {
+    font-family: var(--f-display);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .callout__text em { font-style: italic; color: var(--ink-2); }
+
+  /* ============ STEP LIST ============ */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 32px 0;
+  }
+  .steps > li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .steps > li:last-child { border-bottom: none; }
+  .steps > li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    padding-top: 4px;
+  }
+  .step__title {
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .step__desc {
+    font-size: 16px;
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+  .step__desc + .step__desc { margin-top: 8px; }
+  .step__tag {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--gold-2);
+    color: var(--gold);
+    margin-top: 12px;
+    margin-right: 8px;
+  }
+  .step__tag--mono { color: var(--ink-3); border-color: var(--line-2); }
+
+  /* ============ TABLES ============ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 15px;
+  }
+  th, td {
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom-color: var(--gold-2);
+    font-weight: 400;
+  }
+  td { color: var(--ink); }
+  td.mono { font-family: var(--f-mono); font-size: 13px; color: var(--ink-2); }
+
+  /* ============ TILT POINT ============ */
+  .tilt {
+    background: linear-gradient(90deg, rgba(220,38,38,0.06), transparent 80%);
+    border-left: 3px solid var(--red);
+    padding: 24px 28px;
+    margin: 32px 0 0;
+  }
+  .tilt__label {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tilt__label::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+  }
+  .tilt__title {
+    font-family: var(--f-display);
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .tilt__text {
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 64px 0 96px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  footer .sig {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-2);
+    margin-bottom: 24px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  footer .meta-line {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  footer .meta-line span { color: var(--gold); }
+
+  /* ============ DECORATIVE NUMBERS ============ */
+  .big-num {
+    position: absolute;
+    right: 32px;
+    top: 80px;
+    font-family: var(--f-display);
+    font-size: 280px;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 0.5px var(--gold-2);
+    opacity: 0.25;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+  }
+  section { position: relative; }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero, section { animation: fade-up 0.8s ease-out both; }
+  section:nth-child(odd) { animation-delay: 0.05s; }
+
+  @media (max-width: 720px) {
+    .big-num { font-size: 140px; top: 40px; right: 16px; }
+    .container { padding: 0 20px; }
+    .section__title { font-size: 36px; }
+  }
+</style>
 </head>
-<body class="font-sans antialiased selection:bg-accent-orange selection:text-white">
+<body>
 
-    <!-- Chosen Palette: Primary Brown (#5B5828), Accent Orange (#FF8C00), Off-White (#FDFCF0) -->
-    <!-- Application Structure Plan: This version synthesizes all previous requirements. It leads with a pain-based Hero, follows with a confidence-building Mission, provides professional Proof (Logos), offers an interactive Self-Assessment, introduces the Expert Team, targets high-value B2B clients with a data-driven risk model, and concludes with social proof from Messengers. This multi-layered architecture is designed to address doubt, fear, and the need for results simultaneously. -->
-    <!-- Visualization & Content Choices: 1. B2B Risk Chart: Line chart comparing "Without Intervention" vs "With Vzaiemodiia" to quantify executive burnout/addiction costs. 2. Chat Reviews: Messenger-style UI for authenticity. 3. Expert Section: Professional biography emphasizing clinical practice. NO SVG/Mermaid. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<div class="container">
 
-    <nav class="fixed w-full bg-primary-brown/95 backdrop-blur-sm z-50 border-b border-accent-orange/20 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center gap-2">
-                    <div class="w-8 h-8 rounded bg-accent-orange flex items-center justify-center text-primary-brown font-serif font-bold text-xl">В</div>
-                    <span class="font-serif text-2xl font-bold text-white tracking-wide">Взаємодія</span>
-                </div>
-                <div class="hidden md:flex space-x-8 items-center text-sm font-medium uppercase tracking-widest">
-                    <a href="#assessment" class="text-gray-300 hover:text-accent-orange transition-colors">Симптоми</a>
-                    <a href="#mission" class="text-gray-300 hover:text-accent-orange transition-colors">Місія</a>
-                    <a href="#expert" class="text-gray-300 hover:text-accent-orange transition-colors">Експерти</a>
-                    <a href="#b2b" class="text-gray-300 hover:text-accent-orange transition-colors">Бізнес</a>
-                    <a href="#reviews" class="text-gray-300 hover:text-accent-orange transition-colors">Відгуки</a>
-                    <a href="#contact" class="bg-accent-orange text-white px-6 py-2.5 rounded hover:bg-accent-orange-light transition-colors font-semibold shadow-lg">Записатись</a>
-                </div>
-            </div>
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero__eyebrow">Operational Memorandum · v1.0</div>
+    <h1 class="hero__title">
+      П'ять процесів,<br>
+      які тримають <em>бізнес</em><br>
+      на ногах.
+    </h1>
+    <dl class="hero__meta">
+      <div>
+        <dt>Документ</dt>
+        <dd>Vzaiemodiia · UA · B2C</dd>
+      </div>
+      <div>
+        <dt>Горизонт</dt>
+        <dd>Місяць 1 (травень 2026)</dd>
+      </div>
+      <div>
+        <dt>Аудиторія</dt>
+        <dd>Tetiana · Alexander</dd>
+      </div>
+      <div>
+        <dt>Ціль</dt>
+        <dd>$3–5K / міс · 4+ закриття</dd>
+      </div>
+    </dl>
+  </header>
+
+  <!-- ============ TOC ============ -->
+  <nav class="toc">
+    <h2>Зміст</h2>
+    <ol>
+      <li><span class="toc__title"><a href="#overview">Огляд системи</a></span><span class="toc__owner">Both</span></li>
+      <li><span class="toc__title"><a href="#p1">Content Engine</a></span><span class="toc__owner">Tetiana</span></li>
+      <li><span class="toc__title"><a href="#p2">Lead Capture</a></span><span class="toc__owner">Alexander</span></li>
+      <li><span class="toc__title"><a href="#p3">Qualification</a></span><span class="toc__owner">Alexander</span></li>
+      <li><span class="toc__title"><a href="#p4">Sales Close</a></span><span class="toc__owner">Tetiana</span></li>
+      <li><span class="toc__title"><a href="#p5">Delivery</a></span><span class="toc__owner">Tetiana</span></li>
+      <li><span class="toc__title"><a href="#loop">Замкнений цикл</a></span><span class="toc__owner">System</span></li>
+    </ol>
+  </nav>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section id="overview">
+    <div class="big-num">00</div>
+    <div class="section__num">Початок</div>
+    <h2 class="section__title">Огляд системи</h2>
+    <p class="section__lede">Це не "повна архітектура бізнесу". Це п'ять процесів, які повинні працювати без щоденного нагляду, щоб місяць 1 не залежав від твоєї уваги до кожної дрібниці.</p>
+
+    <div class="prose">
+      <p>Більшість консалтингових документів про бізнес містять <em>п'ятнадцять процесів</em>, кожен зі своїм фреймворком. Це виглядає переконливо і не працює — людський увага не масштабується.</p>
+      <p>Тому тут — <strong>п'ять</strong>. Кожен має одного власника, одну метрику, одну точку, де процес найчастіше ламається. Якщо всі п'ять працюють — бізнес живий. Якщо хоч один зупиняється — інші починають голодувати.</p>
+    </div>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-ov" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 5 main process boxes -->
+        <g>
+          <rect x="40" y="60" width="170" height="100" class="node-fill"/>
+          <text x="125" y="95" text-anchor="middle" class="t-title">Content</text>
+          <text x="125" y="120" text-anchor="middle" class="t-sub">01 · TETIANA</text>
+          <text x="125" y="145" text-anchor="middle" class="t-mono">3 пости / тижд</text>
+        </g>
+
+        <g>
+          <rect x="240" y="60" width="170" height="100" class="node-fill"/>
+          <text x="325" y="95" text-anchor="middle" class="t-title">Lead capture</text>
+          <text x="325" y="120" text-anchor="middle" class="t-sub">02 · ALEX</text>
+          <text x="325" y="145" text-anchor="middle" class="t-mono">10 leads / тижд</text>
+        </g>
+
+        <g>
+          <rect x="440" y="60" width="170" height="100" class="node-fill-warm"/>
+          <text x="525" y="95" text-anchor="middle" class="t-title t-gold">Qualify</text>
+          <text x="525" y="120" text-anchor="middle" class="t-sub">03 · ALEX</text>
+          <text x="525" y="145" text-anchor="middle" class="t-mono">4 calls / тижд</text>
+        </g>
+
+        <g>
+          <rect x="640" y="60" width="170" height="100" class="node-fill-warm"/>
+          <text x="725" y="95" text-anchor="middle" class="t-title t-gold">Close</text>
+          <text x="725" y="120" text-anchor="middle" class="t-sub">04 · TETIANA</text>
+          <text x="725" y="145" text-anchor="middle" class="t-mono">1–2 closes / тижд</text>
+        </g>
+
+        <g>
+          <rect x="840" y="60" width="120" height="100" class="node-fill-success"/>
+          <text x="900" y="95" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Deliver</text>
+          <text x="900" y="120" text-anchor="middle" class="t-sub">05</text>
+          <text x="900" y="145" text-anchor="middle" class="t-mono">90 днів</text>
+        </g>
+
+        <!-- Arrows between -->
+        <line x1="210" y1="110" x2="240" y2="110" class="arr-gold" marker-end="url(#arr-ov)"/>
+        <line x1="410" y1="110" x2="440" y2="110" class="arr-gold" marker-end="url(#arr-ov)"/>
+        <line x1="610" y1="110" x2="640" y2="110" class="arr-gold" marker-end="url(#arr-ov)"/>
+        <line x1="810" y1="110" x2="840" y2="110" class="arr-gold" marker-end="url(#arr-ov)"/>
+
+        <!-- Tilt-points row -->
+        <text x="40" y="220" class="t-sub">Точки розриву</text>
+
+        <g>
+          <rect x="40" y="240" width="280" height="80" class="node-fill-danger"/>
+          <text x="180" y="270" text-anchor="middle" class="t-title t-red">Контент → лідген</text>
+          <text x="180" y="295" text-anchor="middle" class="t-mono">пости без CTA = 0 leads</text>
+        </g>
+
+        <g>
+          <rect x="350" y="240" width="290" height="80" class="node-fill-danger"/>
+          <text x="495" y="270" text-anchor="middle" class="t-title t-red">Lead → Call</text>
+          <text x="495" y="295" text-anchor="middle" class="t-mono">no-shows без pre-call форми</text>
+        </g>
+
+        <g>
+          <rect x="670" y="240" width="290" height="80" class="node-fill-danger"/>
+          <text x="815" y="270" text-anchor="middle" class="t-title t-red">Call → Платіж</text>
+          <text x="815" y="295" text-anchor="middle" class="t-mono">"я подумаю" без депозиту</text>
+        </g>
+
+        <text x="500" y="370" text-anchor="middle" class="t-mono">Колір: золото = генерація &amp; конверсія · зелений = доставка · червоний = ризик</text>
+      </svg>
+    </div>
+
+    <div class="callout">
+      <div class="callout__label">Інсайт</div>
+      <p class="callout__text">Слабка ланка визначає швидкість усієї системи. Якщо <em>Process 1</em> щотижня видає 3 пости без CTA — <em>Process 2</em> голодує, і <em>Process 5</em> не отримує клієнтів через 30 днів. Дисципліна важливіша за стратегію.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS 1: CONTENT ============ -->
+  <section id="p1">
+    <div class="big-num">01</div>
+    <div class="section__num">Процес 01 · Тиждень 1</div>
+    <h2 class="section__title">Content Engine</h2>
+    <p class="section__lede">Тетяна перетворює свою клінічну практику в три публікації на тиждень — кожна закінчується одним і тим самим CTA.</p>
+
+    <dl class="meta-grid">
+      <div><dt>Owner</dt><dd>Tetiana</dd></div>
+      <div><dt>Cadence</dt><dd>3 пости / тижд</dd></div>
+      <div><dt>Час</dt><dd>~90 хв / тижд</dd></div>
+      <div><dt>Канал</dt><dd>LinkedIn + FB</dd></div>
+    </dl>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-p1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Step 1: Input -->
+        <g>
+          <rect x="40" y="40" width="240" height="90" class="node-fill"/>
+          <text x="160" y="73" text-anchor="middle" class="t-title">Клінічні нотатки</text>
+          <text x="160" y="93" text-anchor="middle" class="t-mono">з робочого тижня Tetiana</text>
+          <text x="160" y="113" text-anchor="middle" class="t-sub">INPUT</text>
+        </g>
+        <line x1="280" y1="85" x2="320" y2="85" class="arr-gold" marker-end="url(#arr-p1)"/>
+
+        <!-- Step 2: Find insight -->
+        <g>
+          <rect x="320" y="40" width="240" height="90" class="node-fill"/>
+          <text x="440" y="73" text-anchor="middle" class="t-title">Знайти 1 інсайт</text>
+          <text x="440" y="93" text-anchor="middle" class="t-mono">non-obvious thinking</text>
+          <text x="440" y="113" text-anchor="middle" class="t-sub">STEP 02</text>
+        </g>
+        <line x1="560" y1="85" x2="600" y2="85" class="arr-gold" marker-end="url(#arr-p1)"/>
+
+        <!-- Step 3: Anonymize -->
+        <g>
+          <rect x="600" y="40" width="240" height="90" class="node-fill"/>
+          <text x="720" y="73" text-anchor="middle" class="t-title">Анонімізувати</text>
+          <text x="720" y="93" text-anchor="middle" class="t-mono">деталі змінити</text>
+          <text x="720" y="113" text-anchor="middle" class="t-sub">STEP 03</text>
+        </g>
+        <line x1="720" y1="130" x2="720" y2="160" class="arr-gold" marker-end="url(#arr-p1)"/>
+
+        <!-- Step 4: Write post -->
+        <g>
+          <rect x="600" y="170" width="240" height="90" class="node-fill"/>
+          <text x="720" y="203" text-anchor="middle" class="t-title">Написати пост</text>
+          <text x="720" y="223" text-anchor="middle" class="t-mono">150–300 слів</text>
+          <text x="720" y="243" text-anchor="middle" class="t-sub">STEP 04</text>
+        </g>
+        <line x1="600" y1="215" x2="560" y2="215" class="arr-gold" marker-end="url(#arr-p1)"/>
+
+        <!-- Step 5: Add CTA -->
+        <g>
+          <rect x="320" y="170" width="240" height="90" class="node-fill-warm"/>
+          <text x="440" y="203" text-anchor="middle" class="t-title t-gold">Додати CTA</text>
+          <text x="440" y="223" text-anchor="middle" class="t-mono">→ Self-check PDF</text>
+          <text x="440" y="243" text-anchor="middle" class="t-sub">STEP 05 · CRITICAL</text>
+        </g>
+        <line x1="320" y1="215" x2="280" y2="215" class="arr-gold" marker-end="url(#arr-p1)"/>
+
+        <!-- Step 6: Publish -->
+        <g>
+          <rect x="40" y="170" width="240" height="90" class="node-fill-success"/>
+          <text x="160" y="203" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Запостити</text>
+          <text x="160" y="223" text-anchor="middle" class="t-mono">LinkedIn + особиста FB</text>
+          <text x="160" y="243" text-anchor="middle" class="t-sub">OUTPUT</text>
+        </g>
+
+        <!-- Bottom: result -->
+        <line x1="160" y1="260" x2="160" y2="310" class="arr-gold" marker-end="url(#arr-p1)"/>
+        <g>
+          <rect x="40" y="320" width="920" height="60" class="node-fill-warm"/>
+          <text x="500" y="356" text-anchor="middle" class="t-title t-gold">3 опублікованих пости на тиждень → трафік у Process 02 (Lead Capture)</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Як це працює на практиці</h3>
+
+    <ol class="steps">
+      <li>
+        <div>
+          <h4 class="step__title">Зібрати сировину</h4>
+          <p class="step__desc">Раз на тиждень (понеділок ранок) Tetiana переглядає нотатки з минулого тижня клінічної роботи. Завдання: знайти три моменти, де <em>щось було несподіване</em> — клієнт сказав щось дивне, реакція була нестандартна, або шаблон, який повторюється у різних людей.</p>
+          <span class="step__tag">⏱ 20 хв</span>
+          <span class="step__tag step__tag--mono">Notebook / Notion</span>
         </div>
-    </nav>
-
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 bg-primary-brown overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(74,71,32,1)_0%,_rgba(91,88,40,1)_100%)] z-0"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="max-w-3xl">
-                <p class="text-accent-orange/80 mb-6 font-sans tracking-widest uppercase text-sm font-semibold">Центр вирішення критичних станів</p>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white leading-tight mb-6">
-                    Коли ситуація виходить з-під контролю - важливо не втратити себе або близьку людину остаточно.
-                </h1>
-                <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl font-light leading-relaxed">
-                    Алкоголь. Ігри. Зриви. Виснаження. Конфіденційна допомога для людей із залежністю та сімей у критичних станах.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#contact" class="bg-accent-orange text-white px-8 py-4 rounded text-center font-semibold text-lg hover:bg-accent-orange-light transition-all shadow-[0_4px_15px_rgba(255,140,0,0.4)]">
-                        Записатись конфіденційно
-                    </a>
-                    <a href="#" class="bg-transparent border border-white/30 text-white px-8 py-4 rounded text-center font-semibold text-lg hover:border-accent-orange hover:text-accent-orange transition-colors flex items-center justify-center gap-2">
-                        <span>Написати в Telegram</span>
-                    </a>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Знайти інсайт, а не описати тему</h4>
+          <p class="step__desc">Поганий пост: "5 ознак залежності". Гарний пост: "Власник, який раз на тиждень напивається, рідко вважає себе залежним — і має на це раціональну підставу. Ось чому це найскладніший тип для розпізнавання".</p>
+          <p class="step__desc">Перший — підручник. Другий — твоя думка, яку інший психотерапевт не сформулює.</p>
         </div>
-    </section>
-
-    <!-- Block: Mission Statement -->
-    <section id="mission" class="py-24 bg-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-8 items-center">
-                <div class="lg:col-span-8">
-                    <h2 class="text-accent-orange font-bold text-xs tracking-widest uppercase mb-4">Наша місія</h2>
-                    <p class="text-3xl md:text-5xl font-serif font-bold text-primary-brown leading-tight mb-8">
-                        Ми існуємо, щоб перетворити хаос залежності на <span class="italic text-accent-orange">прогнозоване майбутнє</span>, де контроль належить вам.
-                    </p>
-                    <p class="text-xl text-gray-600 font-light leading-relaxed border-l-4 border-accent-orange pl-6">
-                        Наша мета - повернути людину до повноцінного життя та відновити мир у родинах. Тільки результат, заснований на доказовій медицині та абсолютній конфіденційності.
-                    </p>
-                </div>
-                <div class="lg:col-span-4 hidden lg:flex justify-center">
-                    <div class="w-64 h-64 border-4 border-off-white rounded-full flex items-center justify-center relative">
-                        <div class="w-48 h-48 border-2 border-accent-orange/20 rounded-full animate-pulse"></div>
-                        <div class="absolute inset-0 flex items-center justify-center text-accent-orange font-serif text-4xl font-bold">15+</div>
-                        <div class="absolute -bottom-4 bg-primary-brown text-white px-4 py-2 text-[10px] uppercase tracking-widest font-bold">Років досвіду</div>
-                    </div>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Анонімізувати агресивно</h4>
+          <p class="step__desc">Замінити стать, вік, сферу бізнесу, географію. Жодних деталей, по яких клієнт може себе впізнати. Це не лише етика — це сигнал майбутнім клієнтам "тут не розкажуть про мене".</p>
+          <span class="step__tag step__tag--mono">Правило: 3 деталі змінено мінімум</span>
         </div>
-    </section>
-
-    <!-- Block: Methodology Logos -->
-    <section class="py-12 bg-off-white border-y border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-700">
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-yellow-400 text-primary-brown-dark flex flex-col justify-center items-center font-bold text-[10px] p-1 mb-2">EAGT</div>
-                    <span class="text-[10px] text-center font-semibold uppercase">Gestalt Therapy</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 rounded-full border-2 border-blue-200 flex items-center justify-center text-blue-900 font-bold text-xs mb-2">УІПА</div>
-                    <span class="text-[10px] text-center font-semibold uppercase">Institute of Addictions</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="text-primary-brown-dark font-serif font-bold text-xl mb-2">УСП</div>
-                    <span class="text-[10px] text-center font-semibold uppercase">Спілка Психотерапевтів</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-20 h-12 bg-blue-500 text-white flex items-center justify-center font-bold text-lg mb-2">EAP</div>
-                    <span class="text-[10px] text-center font-semibold uppercase">European Association</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 rounded-full border border-gray-400 flex items-center justify-center p-2 mb-2 text-[8px] font-bold">1784</div>
-                    <span class="text-[10px] text-center font-semibold uppercase">SIGILLUM</span>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Написати пост у структурі</h4>
+          <p class="step__desc">Гачок (1 рядок) → Контекст ситуації (2-3 рядки) → Інсайт (4-5 рядків) → CTA (1 рядок). 150–300 слів. Не довше — LinkedIn-алгоритм карає за надмір.</p>
         </div>
-    </section>
-
-    <section id="assessment" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-brown mb-6">Оцініть вашу ситуацію</h2>
-                    <p class="text-gray-600 mb-8 text-lg">Відмітьте симптоми, які зараз актуальні для вас або вашої близької людини.</p>
-                    <div class="space-y-4" id="symptom-checklist">
-                        <label class="flex items-start gap-4 p-4 bg-off-white rounded border border-gray-200 shadow-sm hover:border-accent-orange transition-colors cursor-pointer">
-                            <input type="checkbox" class="mt-1 symptom-cb">
-                            <span class="text-lg font-medium text-dark-gray">Алкоголь або ігри вже не контролюються</span>
-                        </label>
-                        <label class="flex items-start gap-4 p-4 bg-off-white rounded border border-gray-200 shadow-sm hover:border-accent-orange transition-colors cursor-pointer">
-                            <input type="checkbox" class="mt-1 symptom-cb">
-                            <span class="text-lg font-medium text-dark-gray">Людина постійно зривається після обіцянок</span>
-                        </label>
-                        <label class="flex items-start gap-4 p-4 bg-off-white rounded border border-gray-200 shadow-sm hover:border-accent-orange transition-colors cursor-pointer">
-                            <input type="checkbox" class="mt-1 symptom-cb">
-                            <span class="text-lg font-medium text-dark-gray">З’являються незрозумілі борги та брехня</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="bg-off-white p-8 rounded shadow-lg border-t-4 border-accent-orange text-center flex flex-col items-center">
-                    <h3 class="text-xl font-bold text-primary-brown mb-2">Рівень критичності стану</h3>
-                    <div class="chart-container-small">
-                        <canvas id="riskChart"></canvas>
-                    </div>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Додати CTA — критичний крок</h4>
+          <p class="step__desc">Завжди один і той самий: <strong>"Якщо упізнали себе або близького — у моєму профілі є Self-check на 14 питань. Безкоштовно. Лінк у першому коментарі."</strong></p>
+          <p class="step__desc">Без CTA пост — це освіта. З CTA — це лідген.</p>
+          <span class="step__tag">CRITICAL</span>
         </div>
-    </section>
-
-    <!-- Block: Why Choose Us (Stats) -->
-    <section id="why-us" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-brown">Чому обирають «Взаємодію»</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8 text-center">
-                <div class="p-8 bg-off-white rounded-lg border-b-4 border-accent-orange">
-                    <div class="text-5xl font-serif font-bold text-primary-brown mb-2" id="stat-years">0</div>
-                    <div class="text-accent-orange font-bold uppercase text-xs tracking-widest mb-2">Років практики</div>
-                    <p class="text-gray-600 text-sm">Клінічна наркологія та психіатрія.</p>
-                </div>
-                <div class="p-8 bg-off-white rounded-lg border-b-4 border-accent-orange">
-                    <div class="text-5xl font-serif font-bold text-primary-brown mb-2" id="stat-cases">0</div>
-                    <div class="text-accent-orange font-bold uppercase text-xs tracking-widest mb-2">Успішних кейсів</div>
-                    <p class="text-gray-600 text-sm">Повернення до життя та бізнесу.</p>
-                </div>
-                <div class="p-8 bg-off-white rounded-lg border-b-4 border-accent-orange">
-                    <div class="text-5xl font-serif font-bold text-primary-brown mb-2" id="stat-anon">100%</div>
-                    <div class="text-accent-orange font-bold uppercase text-xs tracking-widest mb-2">Анонімність</div>
-                    <p class="text-gray-600 text-sm">Ваша репутація під надійним захистом.</p>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Запостити в 2 канали</h4>
+          <p class="step__desc">LinkedIn (основний) — там аудиторія B2B-власників. Особиста сторінка FB — там твоя мережа, яка може репостити. Не запускаємо групи, не використовуємо інші платформи в місяць 1.</p>
+          <span class="step__tag step__tag--mono">Cadence: пн / ср / пт ранок</span>
         </div>
-    </section>
+      </li>
+    </ol>
 
-    <!-- Block: Main Expert -->
-    <section id="expert" class="py-24 bg-primary-brown text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="relative">
-                    <div class="bg-gray-300 w-full h-[500px] rounded flex items-center justify-center overflow-hidden grayscale border-2 border-accent-orange/30">
-                        <span class="text-primary-brown-dark font-serif text-2xl italic">[Фото Тетяни Павлусів]</span>
-                    </div>
-                    <div class="absolute -bottom-6 -right-6 bg-accent-orange p-6 rounded shadow-xl hidden md:block">
-                        <p class="font-serif text-white font-bold text-xl italic">"Ми працюємо на результат"</p>
-                    </div>
-                </div>
-                <div>
-                    <span class="text-accent-orange font-bold tracking-widest uppercase text-xs mb-4 block">Експерт</span>
-                    <h2 class="text-4xl md:text-5xl font-serif font-bold mb-8">Тетяна Павлусів</h2>
-                    <p class="text-gray-300 leading-relaxed mb-8">Лікар психіатр, психотерапевт і нарколог. Спеціаліст з подолання залежностей, зривів та втрати контролю.</p>
-                    <ul class="space-y-3 text-gray-200 mb-8">
-                        <li>— Без осуду і моралізаторства</li>
-                        <li>— З медичним розумінням залежності</li>
-                        <li>— З повною конфіденційністю</li>
-                    </ul>
-                    <div class="flex gap-4">
-                        <div class="w-32 h-44 bg-white/10 rounded border border-white/20 flex items-center justify-center p-2 text-[8px] text-center italic uppercase">Диплом лікаря</div>
-                        <div class="w-32 h-44 bg-white/10 rounded border border-white/20 flex items-center justify-center p-2 text-[8px] text-center italic uppercase">Сертифікат нарколога</div>
-                    </div>
-                </div>
-            </div>
+    <div class="tilt">
+      <div class="tilt__label">Точка розриву</div>
+      <h4 class="tilt__title">Пости без CTA = трафік без лідів</h4>
+      <p class="tilt__text">Це найпоширеніша помилка експертів. Хочеться "не виглядати продавцем". Результат: 50 переглядів, 5 лайків, 0 заявок. Process 2 голодує, бо Process 1 не виконав свою роль — він не закінчив речення.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS 2: LEAD CAPTURE ============ -->
+  <section id="p2">
+    <div class="big-num">02</div>
+    <div class="section__num">Процес 02 · Тиждень 1</div>
+    <h2 class="section__title">Lead Capture</h2>
+    <p class="section__lede">Три джерела трафіку сходяться в одну точку обліку. Одна форма, одна таблиця, один Telegram-сигнал. Без єдиної точки половина заявок зникає.</p>
+
+    <dl class="meta-grid">
+      <div><dt>Owner</dt><dd>Alexander</dd></div>
+      <div><dt>Tools</dt><dd>Google Form + Sheet</dd></div>
+      <div><dt>Notify</dt><dd>Telegram-бот</dd></div>
+      <div><dt>SLA</dt><dd>відповідь &lt; 24 год</dd></div>
+    </dl>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-p2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <text x="40" y="30" class="t-sub">3 джерела</text>
+
+        <g>
+          <rect x="40" y="50" width="220" height="60" class="node-fill"/>
+          <text x="150" y="78" text-anchor="middle" class="t-title">LinkedIn CTA</text>
+          <text x="150" y="98" text-anchor="middle" class="t-mono">з постів Tetiana</text>
+        </g>
+
+        <g>
+          <rect x="40" y="130" width="220" height="60" class="node-fill"/>
+          <text x="150" y="158" text-anchor="middle" class="t-title">Warm outreach</text>
+          <text x="150" y="178" text-anchor="middle" class="t-mono">30 повідомлень / тижд</text>
+        </g>
+
+        <g>
+          <rect x="40" y="210" width="220" height="60" class="node-fill"/>
+          <text x="150" y="238" text-anchor="middle" class="t-title">Рекомендації</text>
+          <text x="150" y="258" text-anchor="middle" class="t-mono">FB · WhatsApp · friends</text>
+        </g>
+
+        <!-- Converging arrows -->
+        <line x1="260" y1="80" x2="395" y2="155" class="arr-gold" marker-end="url(#arr-p2)"/>
+        <line x1="260" y1="160" x2="395" y2="160" class="arr-gold" marker-end="url(#arr-p2)"/>
+        <line x1="260" y1="240" x2="395" y2="165" class="arr-gold" marker-end="url(#arr-p2)"/>
+
+        <!-- Hub -->
+        <g>
+          <rect x="400" y="120" width="220" height="100" class="node-fill-warm"/>
+          <text x="510" y="155" text-anchor="middle" class="t-title t-gold">Google Form</text>
+          <text x="510" y="180" text-anchor="middle" class="t-mono">→ Google Sheet</text>
+          <text x="510" y="205" text-anchor="middle" class="t-sub">HUB · SINGLE SOURCE</text>
+        </g>
+
+        <line x1="620" y1="150" x2="715" y2="100" class="arr-gold" marker-end="url(#arr-p2)"/>
+        <line x1="620" y1="190" x2="715" y2="240" class="arr-gold" marker-end="url(#arr-p2)"/>
+
+        <!-- Output 1 -->
+        <g>
+          <rect x="720" y="60" width="240" height="80" class="node-fill-success"/>
+          <text x="840" y="92" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Авто-лист клієнту</text>
+          <text x="840" y="112" text-anchor="middle" class="t-mono">PDF + лінк на Calendly</text>
+          <text x="840" y="130" text-anchor="middle" class="t-sub">DELAY: 5 хв</text>
+        </g>
+
+        <!-- Output 2 -->
+        <g>
+          <rect x="720" y="200" width="240" height="80" class="node-fill-success"/>
+          <text x="840" y="232" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Telegram-бот → Alex</text>
+          <text x="840" y="252" text-anchor="middle" class="t-mono">сигнал у мобільний</text>
+          <text x="840" y="270" text-anchor="middle" class="t-sub">DELAY: 0 хв</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Анатомія форми</h3>
+    <p class="prose" style="margin-bottom: 24px;">Найгірше, що можна зробити з лідген-формою — попросити 12 полів. Найкраще — попросити рівно стільки, скільки потрібно щоб зрозуміти: <em>чи варто витрачати 30 хв на цю людину</em>.</p>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Поле</th><th>Тип</th><th>Чому це поле</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">01</td><td>Ім'я</td><td class="mono">text</td><td>Базова персоналізація.</td></tr>
+        <tr><td class="mono">02</td><td>Email</td><td class="mono">email</td><td>Канал доставки PDF + nurture.</td></tr>
+        <tr><td class="mono">03</td><td>Телефон</td><td class="mono">phone</td><td>Backup-канал. Серйозність наміру.</td></tr>
+        <tr><td class="mono">04</td><td>Що зараз тривожить</td><td class="mono">textarea (2-3 рядки)</td><td>Перший фільтр якості. Хто пише &lt;10 слів — не готовий.</td></tr>
+        <tr><td class="mono">05</td><td>Готовність до 30-хв розмови?</td><td class="mono">yes / no / later</td><td>Прямий signal intent. "Later" — у nurture.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout__label">Правило 5 полів</div>
+      <p class="callout__text">Кожне додаткове поле забирає <em>5–10%</em> конверсії. У вас 5 — це baseline. Якщо колись захочете додати — спочатку приберіть одне.</p>
+    </div>
+
+    <div class="tilt">
+      <div class="tilt__label">Точка розриву</div>
+      <h4 class="tilt__title">Заявки в особистих повідомленнях ≠ облік</h4>
+      <p class="tilt__text">Якщо клієнт написав Tetiana у LinkedIn DM, а Tetiana переслала Alex'у в WhatsApp, а той не додав у Sheet — лід пропав. До кінця місяця накопичиться 15–20 таких. Це і є <em>"воронка протікає"</em>. Правило: лід існує тоді і тільки тоді, коли він у Google Sheet.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS 3: QUALIFICATION ============ -->
+  <section id="p3">
+    <div class="big-num">03</div>
+    <div class="section__num">Процес 03 · Тиждень 2</div>
+    <h2 class="section__title">Qualification</h2>
+    <p class="section__lede">Гейтер між Process 2 і Process 4. Захищає головний ресурс бізнесу — час Тетяни. Без нього 70% Diagnostic Calls перетворюються на безкоштовну терапію.</p>
+
+    <dl class="meta-grid">
+      <div><dt>Owner</dt><dd>Alexander</dd></div>
+      <div><dt>Час на лід</dt><dd>10 хв</dd></div>
+      <div><dt>Pass rate</dt><dd>~40–50%</dd></div>
+      <div><dt>SLA</dt><dd>обробка &lt; 24 год</dd></div>
+    </dl>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-p3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Input -->
+        <g>
+          <rect x="380" y="30" width="240" height="70" class="node-fill"/>
+          <text x="500" y="62" text-anchor="middle" class="t-title">Lead з Google Sheet</text>
+          <text x="500" y="82" text-anchor="middle" class="t-mono">~10 на тиждень (ціль)</text>
+        </g>
+        <line x1="500" y1="100" x2="500" y2="125" class="arr-gold" marker-end="url(#arr-p3)"/>
+
+        <!-- Pre-call form -->
+        <g>
+          <rect x="280" y="135" width="440" height="100" class="node-fill-warm"/>
+          <text x="500" y="170" text-anchor="middle" class="t-title t-gold">Pre-call form (4 питання)</text>
+          <text x="500" y="195" text-anchor="middle" class="t-mono">хто звертається · що тригер · бюджет ≥30K ₴ · хто платить</text>
+          <text x="500" y="218" text-anchor="middle" class="t-sub">ALEX ЧЕКАЄ 24 ГОД</text>
+        </g>
+        <line x1="500" y1="235" x2="500" y2="260" class="arr-gold" marker-end="url(#arr-p3)"/>
+
+        <!-- Decision -->
+        <g>
+          <rect x="380" y="265" width="240" height="60" class="node-fill-warm"/>
+          <text x="500" y="293" text-anchor="middle" class="t-title t-gold">Чи всі 4 критерії?</text>
+          <text x="500" y="313" text-anchor="middle" class="t-sub">GATE</text>
+        </g>
+
+        <!-- Yes branch -->
+        <line x1="380" y1="295" x2="220" y2="345" class="arr-gold" marker-end="url(#arr-p3)"/>
+        <text x="300" y="320" class="t-mono t-gold">Так →</text>
+        <g>
+          <rect x="40" y="350" width="380" height="60" class="node-fill-success"/>
+          <text x="230" y="378" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Запис на Diagnostic Call</text>
+          <text x="230" y="398" text-anchor="middle" class="t-mono">Calendly · 30 хв · слот у Tetiana</text>
+        </g>
+
+        <!-- No branch -->
+        <line x1="620" y1="295" x2="780" y2="345" class="arr" marker-end="url(#arr-p3)"/>
+        <text x="650" y="320" class="t-mono">Ні →</text>
+        <g>
+          <rect x="580" y="350" width="380" height="60" class="node-fill"/>
+          <text x="770" y="378" text-anchor="middle" class="t-title">Лист "не зараз"</text>
+          <text x="770" y="398" text-anchor="middle" class="t-mono">3 безкоштовні ресурси · revisit за 60 днів</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">4 критерії кваліфікації</h3>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Критерій</th><th>Питання у формі</th><th>Що проходить</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono">01</td>
+          <td>Хто звертається</td>
+          <td class="mono">"Ви звертаєтесь за собою чи за близькою людиною?"</td>
+          <td>Тип A (за собою) або Тип C (за партнером/близьким). Не "просто цікаво".</td>
+        </tr>
+        <tr>
+          <td class="mono">02</td>
+          <td>Що тригер</td>
+          <td class="mono">"Що сталося протягом останніх 30 днів, що ви тут?"</td>
+          <td>Конкретна подія. Не "просто хотіла поговорити", не "якось задумалась".</td>
+        </tr>
+        <tr>
+          <td class="mono">03</td>
+          <td>Бюджет</td>
+          <td class="mono">"Програма коштує від 30K. Це у бюджеті?"</td>
+          <td>"Так" або "потрібно дізнатись деталі". "Ні" або тиша — стоп.</td>
+        </tr>
+        <tr>
+          <td class="mono">04</td>
+          <td>Хто платить</td>
+          <td class="mono">"Рішення приймаєте ви чи потрібен ще хтось?"</td>
+          <td>Сама людина або співрозмовник, який буде на дзвінку. Не "мама вирішує".</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout__label">Принцип</div>
+      <p class="callout__text">Дискваліфікація — це <em>послуга</em> для людини. "Зараз вам не сюди, ось куди" — це краще, ніж 30 хв розмови, де ми обоє розуміємо, що угоди не буде.</p>
+    </div>
+
+    <div class="tilt">
+      <div class="tilt__label">Точка розриву</div>
+      <h4 class="tilt__title">Без pre-call форми всі ліди їдуть до Tetiana</h4>
+      <p class="tilt__text">70% з них будуть "просто поговорити". Це 35 годин на місяць pro-bono консультацій під виглядом продажу — ні грошей, ні часу на справжніх клієнтів. Tetiana вигорить за 2-3 тижні. Цей gate-keeper — її <em>захист</em>, не бюрократія.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS 4: SALES CLOSE ============ -->
+  <section id="p4">
+    <div class="big-num">04</div>
+    <div class="section__num">Процес 04 · Тиждень 2</div>
+    <h2 class="section__title">Sales Close</h2>
+    <p class="section__lede">30 хвилин. 5 фаз. Місія — рішення на дзвінку, не "я подумаю". Це найделікатніший процес у системі: тут Тетяна перемикається між роллю експерта і роллю продавця, не втрачаючи жодну з них.</p>
+
+    <dl class="meta-grid">
+      <div><dt>Owner</dt><dd>Tetiana</dd></div>
+      <div><dt>Тривалість</dt><dd>30 хв</dd></div>
+      <div><dt>Close rate</dt><dd>~30–40%</dd></div>
+      <div><dt>Anchor</dt><dd>депозит 30%</dd></div>
+    </dl>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-p4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Phase 1 -->
+        <g>
+          <rect x="40" y="30" width="120" height="60" class="node-fill-warm"/>
+          <text x="100" y="58" text-anchor="middle" class="t-title t-gold">0–5 хв</text>
+          <text x="100" y="78" text-anchor="middle" class="t-sub">RAPPORT</text>
+        </g>
+        <g>
+          <rect x="180" y="30" width="780" height="60" class="node-fill"/>
+          <text x="200" y="58" class="t-title">Розкривши камеру, дякую за час. Перевірити приватність простору.</text>
+          <text x="200" y="78" class="t-mono">Мета: клієнт зрозумів — це конфіденційно. Не сповідь, а консультація.</text>
+        </g>
+        <line x1="500" y1="90" x2="500" y2="115" class="arr" marker-end="url(#arr-p4)"/>
+
+        <!-- Phase 2 -->
+        <g>
+          <rect x="40" y="120" width="120" height="60" class="node-fill-warm"/>
+          <text x="100" y="148" text-anchor="middle" class="t-title t-gold">5–15 хв</text>
+          <text x="100" y="168" text-anchor="middle" class="t-sub">DISCOVERY</text>
+        </g>
+        <g>
+          <rect x="180" y="120" width="780" height="60" class="node-fill"/>
+          <text x="200" y="148" class="t-title">Глибокі питання: що тригер · як давно · хто знає · що пробували.</text>
+          <text x="200" y="168" class="t-mono">Tetiana слухає 80%, говорить 20%. Збирає клінічну картину.</text>
+        </g>
+        <line x1="500" y1="180" x2="500" y2="205" class="arr" marker-end="url(#arr-p4)"/>
+
+        <!-- Phase 3 -->
+        <g>
+          <rect x="40" y="210" width="120" height="60" class="node-fill-warm"/>
+          <text x="100" y="238" text-anchor="middle" class="t-title t-gold">15–20 хв</text>
+          <text x="100" y="258" text-anchor="middle" class="t-sub">INSIGHT</text>
+        </g>
+        <g>
+          <rect x="180" y="210" width="780" height="60" class="node-fill"/>
+          <text x="200" y="238" class="t-title">"Ось що я бачу. Це не унікально, це паттерн X. Працюємо так..."</text>
+          <text x="200" y="258" class="t-mono">Дати клієнту 1 нову точку зору. Це доказ експертизи, не терапія на дзвінку.</text>
+        </g>
+        <line x1="500" y1="270" x2="500" y2="295" class="arr" marker-end="url(#arr-p4)"/>
+
+        <!-- Phase 4 -->
+        <g>
+          <rect x="40" y="300" width="120" height="60" class="node-fill-warm"/>
+          <text x="100" y="328" text-anchor="middle" class="t-title t-gold">20–26 хв</text>
+          <text x="100" y="348" text-anchor="middle" class="t-sub">PITCH</text>
+        </g>
+        <g>
+          <rect x="180" y="300" width="780" height="60" class="node-fill"/>
+          <text x="200" y="328" class="t-title">Опис програми: фази · тривалість · ціна · як починається.</text>
+          <text x="200" y="348" class="t-mono">Без знижок. Не "якщо потрібна допомога", а "ось як ми починаємо".</text>
+        </g>
+        <line x1="500" y1="360" x2="500" y2="385" class="arr-gold" marker-end="url(#arr-p4)"/>
+
+        <!-- Phase 5: CLOSE -->
+        <g>
+          <rect x="40" y="390" width="120" height="60" class="node-fill-warm"/>
+          <text x="100" y="418" text-anchor="middle" class="t-title t-gold">26–30 хв</text>
+          <text x="100" y="438" text-anchor="middle" class="t-sub">CLOSE</text>
+        </g>
+        <g>
+          <rect x="180" y="390" width="780" height="60" class="node-fill-success"/>
+          <text x="200" y="418" class="t-title" style="fill:#7ec9a8">"Ви готові почати? Депозит 30% сьогодні фіксує перший слот."</text>
+          <text x="200" y="438" class="t-mono">Тиша. Не заповнювати. Якщо "подумаю" → дзвінок через 48 год макс.</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Психологія розмови</h3>
+
+    <ol class="steps">
+      <li>
+        <div>
+          <h4 class="step__title">Rapport — не small talk</h4>
+          <p class="step__desc">Не "як настрій?" і не "як справи?". А: "Дякую, що знайшли час. Перш ніж почнемо — ви зараз у безпечному просторі, де можете говорити?" Це <em>setting</em> для конфіденційної розмови, не для дружньої.</p>
         </div>
-    </section>
-
-    <!-- Restored Block: B2B Section -->
-    <section id="b2b" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <span class="text-accent-orange font-semibold tracking-wider uppercase text-sm mb-4 block">B2B Сегмент</span>
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-brown mb-6">Коли ключова людина в бізнесі втрачає контроль - це руйнує команду, рішення і гроші.</h2>
-                    <p class="text-gray-600 text-lg mb-8 leading-relaxed">
-                        Вигорання, залежності або критичний стрес у власника чи топменеджера мають прямий фінансовий еквівалент. Ми пропонуємо конфіденційний супровід перших осіб для швидкої стабілізації.
-                    </p>
-                    <div class="p-6 bg-off-white border-l-4 border-accent-orange mb-8">
-                        <p class="italic text-primary-brown-dark">"Проблеми керівника, або ключових членів команди - це системні проблеми компанії. Ми допомагаємо зберегти активи та репутацію."</p>
-                    </div>
-                </div>
-                <div class="bg-primary-brown p-8 rounded-lg shadow-2xl">
-                    <h3 class="text-center text-white font-serif text-xl mb-4">Вплив кризи на ефективність бізнесу</h3>
-                    <div class="chart-container">
-                        <canvas id="b2bChart"></canvas>
-                    </div>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Discovery — 80/20 на користь клієнта</h4>
+          <p class="step__desc">Tetiana ставить відкриті запитання і слухає. Чотири запитання: <em>"Що тригер останніх 30 днів?", "Як це впливає на бізнес?", "Що ви пробували?", "Хто знає про це?"</em>. Кожне дає 2-3 хвилини відповіді.</p>
+          <p class="step__desc">Помилка: давати поради на цій фазі. Це передчасно — ще немає клінічної картини.</p>
         </div>
-    </section>
-
-    <!-- Block: Reviews (Chat Style) -->
-    <section id="reviews" class="py-24 bg-off-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-brown">Те, що клієнти пишуть нам в месенджерах</h2>
-                <p class="text-gray-500 mt-4 italic">Ми цінуємо конфіденційність, тому імена клієнтів приховані.</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="chat-screenshot border-t-4 border-chat-tg mx-auto">
-                    <div class="flex items-center gap-2 mb-3 border-b pb-2"><span class="text-xs font-bold text-chat-tg">Telegram</span></div>
-                    <p class="text-sm text-gray-700">Тетяно, дякую вам. Вже місяць, як чоловік не торкається алкоголю. В домі нарешті спокійно.</p>
-                    <div class="text-[10px] text-gray-400 text-right mt-2">14:20 ✓✓</div>
-                </div>
-                <div class="chat-screenshot border-t-4 border-chat-viber mx-auto md:mt-12">
-                    <div class="flex items-center gap-2 mb-3 border-b pb-2"><span class="text-xs font-bold text-chat-viber">Viber</span></div>
-                    <p class="text-sm text-gray-700 italic">...Я нарешті відчув контроль над ситуацією. Ті борги в минулому. Дякую за чесний підхід.</p>
-                    <div class="text-[10px] text-gray-400 text-right mt-2">09:15</div>
-                </div>
-                <div class="chat-screenshot border-t-4 border-chat-wa mx-auto">
-                    <div class="flex items-center gap-2 mb-3 border-b pb-2"><span class="text-xs font-bold text-chat-wa">WhatsApp</span></div>
-                    <p class="text-sm text-gray-700">Вікторія, ваша консультація врятувала мене вночі. Дякую, що були на зв'язку.</p>
-                    <div class="text-[10px] text-gray-400 text-right mt-2">23:45 ✓</div>
-                </div>
-            </div>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Insight — те, заради чого клієнт прийшов</h4>
+          <p class="step__desc">5 хвилин, де Tetiana дає <strong>одну</strong> точку зору, яку клієнт не міг отримати з Google. Конкретний паттерн, який вона бачить у його ситуації. Це доказ експертизи. Це причина, чому він заплатить.</p>
+          <p class="step__desc">Якщо insight банальний — продажу не буде. Це місце, де ремесло Tetiana вирішує все.</p>
         </div>
-    </section>
-
-    <footer id="contact" class="bg-dark-gray text-white py-20 border-t-4 border-accent-orange">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6 italic text-accent-orange uppercase tracking-widest">Поверніть контроль сьогодні</h2>
-            <form class="space-y-4 max-w-md mx-auto" onsubmit="event.preventDefault(); alert('Дякуємо! Наш спеціаліст зв’яжеться з вами.');">
-                <input type="text" placeholder="Ваше ім'я" class="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white focus:outline-none focus:border-accent-orange" required>
-                <input type="tel" placeholder="Номер телефону" class="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white focus:outline-none focus:border-accent-orange" required>
-                <button type="submit" class="w-full bg-accent-orange text-white font-bold py-4 rounded hover:bg-accent-orange-light transition-all text-lg shadow-lg mt-4 uppercase tracking-widest">Записатись конфіденційно</button>
-            </form>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Pitch — без перепрошування</h4>
+          <p class="step__desc">"Ось як ми працюємо: 90 днів, три фази, перша діагностична — 2 тижні, з письмовим звітом наприкінці. Програма коштує 30/50/90K залежно від пакету. Найчастіше беруть Premium — 50K. Платіж: 30% депозиту, решта розбита на 2 транші."</p>
+          <p class="step__desc">Без "якщо вас зацікавить", без "ціна може здатись...". Спокійно, як хірург розповідає про операцію.</p>
         </div>
-    </footer>
+      </li>
+      <li>
+        <div>
+          <h4 class="step__title">Close — тиша</h4>
+          <p class="step__desc">"Ви готові почати? Депозит 30% сьогодні фіксує перший сесійний слот наступного тижня." <strong>Замовкнути.</strong> Не заповнювати тишу. Перший, хто заговорить — програє переговори.</p>
+          <p class="step__desc">Якщо "так" — Alex надсилає реквізити. Якщо "мені потрібно подумати" — призначити конкретний дзвінок через 48 годин максимум. "Я подумаю і повернусь" без дати — це 92% ні.</p>
+          <span class="step__tag">CRITICAL</span>
+        </div>
+      </li>
+    </ol>
 
-    <script>
-        const animateValue = (id, start, end, duration) => {
-            const obj = document.getElementById(id);
-            if(!obj) return;
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start) + (id === 'stat-anon' ? '%' : '');
-                if (progress < 1) window.requestAnimationFrame(step);
-            };
-            window.requestAnimationFrame(step);
-        };
+    <div class="tilt">
+      <div class="tilt__label">Точка розриву</div>
+      <h4 class="tilt__title">Без депозиту close rate падає з 35% до 8%</h4>
+      <p class="tilt__text">"Я подумаю" — це не "ні", але і не "так". Це місце, де 92% людей зникають. Депозит 30% на дзвінку = <em>commitment</em>, який змінює внутрішню розмову клієнта з "чи варто?" на "коли почати?". Без цього кроку всі попередні 28 хвилин розмови — благодійність.</p>
+    </div>
+  </section>
 
-        const ctxRisk = document.getElementById('riskChart').getContext('2d');
-        const riskChart = new Chart(ctxRisk, {
-            type: 'doughnut',
-            data: {
-                labels: ['Безпека', 'Ризик', 'Критично'],
-                datasets: [{
-                    data: [100, 0, 0],
-                    backgroundColor: ['#E5E7EB', '#FF8C00', '#8B0000'],
-                    borderWidth: 0, cutout: '80%'
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false }, tooltip: { enabled: false } }
-            }
-        });
+  <!-- ============ PROCESS 5: DELIVERY ============ -->
+  <section id="p5">
+    <div class="big-num">05</div>
+    <div class="section__num">Процес 05 · Дні 1–90</div>
+    <h2 class="section__title">Delivery</h2>
+    <p class="section__lede">90 днів, три фази, два письмових продукти на руках клієнта. Це не "доставка послуги" — це двигун системи. Без матеріального результату немає кейсів, без кейсів немає рекомендацій, без рекомендацій бізнес не масштабується.</p>
 
-        document.querySelectorAll('.symptom-cb').forEach(cb => {
-            cb.addEventListener('change', () => {
-                const checked = document.querySelectorAll('.symptom-cb:checked').length;
-                const total = document.querySelectorAll('.symptom-cb').length;
-                const risk = (checked / total) * 100;
-                riskChart.data.datasets[0].data = checked === 0 ? [100, 0, 0] : [0, 100 - risk, risk];
-                riskChart.update();
-            });
-        });
+    <dl class="meta-grid">
+      <div><dt>Owner</dt><dd>Tetiana</dd></div>
+      <div><dt>Тривалість</dt><dd>90 + 30 днів</dd></div>
+      <div><dt>Час на клієнта</dt><dd>~14 годин</dd></div>
+      <div><dt>Артефакти</dt><dd>звіт + план</dd></div>
+    </dl>
 
-        let b2bChartInstance = null;
-        const initB2BChart = () => {
-            if(b2bChartInstance) return;
-            const ctxB2B = document.getElementById('b2bChart').getContext('2d');
-            b2bChartInstance = new Chart(ctxB2B, {
-                type: 'line',
-                data: {
-                    labels: ['М1', 'М2', 'М3', 'М4', 'М5', 'М6'],
-                    datasets: [
-                        { label: 'Без супроводу', data: [100, 80, 50, 30, 20, 10], borderColor: '#8B0000', backgroundColor: 'rgba(139, 0, 0, 0.1)', fill: true, tension: 0.4 },
-                        { label: 'З супроводом', data: [100, 95, 98, 105, 115, 125], borderColor: '#FF8C00', backgroundColor: 'rgba(255, 140, 0, 0.1)', fill: true, tension: 0.4 }
-                    ]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#fff' } } },
-                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
-                }
-            });
-        };
+    <div class="diagram">
+      <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-p5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (entry.target.id === 'why-us') {
-                        animateValue('stat-years', 0, 15, 2000);
-                        animateValue('stat-cases', 0, 850, 2500);
-                    }
-                    if (entry.target.id === 'b2b') initB2BChart();
-                }
-            });
-        }, { threshold: 0.2 });
+        <!-- Day 1 -->
+        <g>
+          <rect x="40" y="30" width="140" height="60" class="node-fill-success"/>
+          <text x="110" y="58" text-anchor="middle" class="t-title" style="fill:#7ec9a8">День 1</text>
+          <text x="110" y="78" text-anchor="middle" class="t-sub">ONBOARDING</text>
+        </g>
+        <g>
+          <rect x="200" y="30" width="760" height="60" class="node-fill"/>
+          <text x="220" y="58" class="t-title">Контракт · повний платіж · welcome-лист · календар на 90 днів.</text>
+          <text x="220" y="78" class="t-mono">Owner: Alex (адмін). Tetiana не торкається паперів.</text>
+        </g>
+        <line x1="500" y1="90" x2="500" y2="115" class="arr-gold" marker-end="url(#arr-p5)"/>
 
-        observer.observe(document.getElementById('why-us'));
-        observer.observe(document.getElementById('b2b'));
-    </script>
+        <!-- Phase 1 -->
+        <g>
+          <rect x="40" y="120" width="140" height="60" class="node-fill-success"/>
+          <text x="110" y="148" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Тиждень 1–2</text>
+          <text x="110" y="168" text-anchor="middle" class="t-sub">DIAGNOSTIC</text>
+        </g>
+        <g>
+          <rect x="200" y="120" width="760" height="60" class="node-fill"/>
+          <text x="220" y="148" class="t-title">2 сесії × 90 хв · опитувальники · baseline-метрики · письмовий звіт.</text>
+          <text x="220" y="168" class="t-mono">Звіт на 3–4 сторінки. Це "продукт", який клієнт тримає в руках.</text>
+        </g>
+        <line x1="500" y1="180" x2="500" y2="205" class="arr-gold" marker-end="url(#arr-p5)"/>
+
+        <!-- Phase 2 -->
+        <g>
+          <rect x="40" y="210" width="140" height="60" class="node-fill-success"/>
+          <text x="110" y="238" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Тиждень 3–6</text>
+          <text x="110" y="258" text-anchor="middle" class="t-sub">STABILIZATION</text>
+        </g>
+        <g>
+          <rect x="200" y="210" width="760" height="60" class="node-fill"/>
+          <text x="220" y="238" class="t-title">4 щотижневих сесії × 60 хв · щоденні WhatsApp check-in (1–2 рядки).</text>
+          <text x="220" y="258" class="t-mono">Робочі години Tetiana — критично. Не 24/7. Інакше delivery вб'є sales.</text>
+        </g>
+        <line x1="500" y1="270" x2="500" y2="295" class="arr-gold" marker-end="url(#arr-p5)"/>
+
+        <!-- Phase 3 -->
+        <g>
+          <rect x="40" y="300" width="140" height="60" class="node-fill-success"/>
+          <text x="110" y="328" text-anchor="middle" class="t-title" style="fill:#7ec9a8">Тиждень 7–12</text>
+          <text x="110" y="348" text-anchor="middle" class="t-sub">INTEGRATION</text>
+        </g>
+        <g>
+          <rect x="200" y="300" width="760" height="60" class="node-fill"/>
+          <text x="220" y="328" class="t-title">3 сесії раз/2 тижні · relapse-prevention план · сесія з партнером (опц).</text>
+          <text x="220" y="348" class="t-mono">Письмовий план на 6 міс вперед — другий "матеріальний продукт".</text>
+        </g>
+        <line x1="500" y1="360" x2="500" y2="385" class="arr-gold" marker-end="url(#arr-p5)"/>
+
+        <!-- Loop back -->
+        <g>
+          <rect x="40" y="390" width="140" height="60" class="node-fill-warm"/>
+          <text x="110" y="418" text-anchor="middle" class="t-title t-gold">День 90+</text>
+          <text x="110" y="438" text-anchor="middle" class="t-sub">LOOP BACK</text>
+        </g>
+        <g>
+          <rect x="200" y="390" width="760" height="60" class="node-fill-warm"/>
+          <text x="220" y="418" class="t-title t-gold">Завершальна зустріч → запит на письмовий відгук + 2 рекомендації.</text>
+          <text x="220" y="438" class="t-mono">Повертає Process 1 (контент-кейс) і Process 2 (новий теплий лід).</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3 style="font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 48px 0 16px;">Два матеріальних продукти</h3>
+    <p class="prose" style="margin-bottom: 24px;">Це <strong>головна відмінність</strong> від pay-per-session. Терапевти продають години розмови. Ви продаєте <em>два документи</em>, упаковані в 90 днів супроводу.</p>
+
+    <table>
+      <thead>
+        <tr><th>Артефакт</th><th>Коли</th><th>Що містить</th><th>Чому це важливо</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color: var(--gold)">Diagnostic Report</strong></td>
+          <td class="mono">Тиждень 2</td>
+          <td>3–4 сторінки. Клінічна картина. Паттерн. Прогноз. Baseline-метрики.</td>
+          <td>Клієнт відчуває, що отримав щось <em>фізичне</em> за свої гроші. Знижує тривогу "а раптом це не працює".</td>
+        </tr>
+        <tr>
+          <td><strong style="color: var(--gold)">Relapse-Prevention Plan</strong></td>
+          <td class="mono">Тиждень 12</td>
+          <td>2 сторінки. Тригери. Червоні прапори. Протокол дій. Контакти.</td>
+          <td>Це <em>сертифікат завершення</em>. Клієнт іде з відчуттям "я тепер володію методом", а не "терапія закінчилась".</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout__label">Принцип</div>
+      <p class="callout__text">"Я просто говорив із терапевтом 12 разів" — це <em>не</em> історія, яку розповідають друзям. "Тетяна склала для мене протокол, я можу його показати" — це історія, з якої народжуються рекомендації.</p>
+    </div>
+
+    <div class="tilt">
+      <div class="tilt__label">Точка розриву</div>
+      <h4 class="tilt__title">Без письмового результату — низькі рекомендації</h4>
+      <p class="tilt__text">Тут і вмирає більшість терапевтичних практик. Сесії проведені, грошам отримано, людина пішла — і нічого не передає далі. Письмові артефакти роблять результат <em>передаваним</em>: клієнт показує план дружині / партнеру / другу, і це автоматично — рекомендація без слів.</p>
+    </div>
+  </section>
+
+  <!-- ============ CLOSED LOOP ============ -->
+  <section id="loop">
+    <div class="big-num">∞</div>
+    <div class="section__num">Замикання</div>
+    <h2 class="section__title">Замкнений цикл</h2>
+    <p class="section__lede">Коли всі п'ять процесів працюють — кожен закритий клієнт генерує два нових теплих ліди через рекомендацію і три кейси для контенту. Бізнес стає самопідживленим.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-loop-dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 1. Content (top left) -->
+        <g>
+          <rect x="60" y="50" width="220" height="90" class="node-fill"/>
+          <text x="170" y="85" text-anchor="middle" class="t-title">01 · Content</text>
+          <text x="170" y="105" text-anchor="middle" class="t-mono">3 пости / тижд</text>
+          <text x="170" y="125" text-anchor="middle" class="t-sub">TETIANA</text>
+        </g>
+
+        <!-- 2. Lead capture (top right) -->
+        <g>
+          <rect x="720" y="50" width="220" height="90" class="node-fill"/>
+          <text x="830" y="85" text-anchor="middle" class="t-title">02 · Lead capture</text>
+          <text x="830" y="105" text-anchor="middle" class="t-mono">10 leads / тижд</text>
+          <text x="830" y="125" text-anchor="middle" class="t-sub">ALEX</text>
+        </g>
+
+        <!-- 3. Qualify (right middle) -->
+        <g>
+          <rect x="760" y="200" width="180" height="80" class="node-fill-warm"/>
+          <text x="850" y="232" text-anchor="middle" class="t-title t-gold">03 · Qualify</text>
+          <text x="850" y="252" text-anchor="middle" class="t-mono">4–5 calls / тижд</text>
+          <text x="850" y="272" text-anchor="middle" class="t-sub">ALEX</text>
+        </g>
+
+        <!-- 4. Close (bottom right) -->
+        <g>
+          <rect x="600" y="330" width="180" height="80" class="node-fill-warm"/>
+          <text x="690" y="362" text-anchor="middle" class="t-title t-gold">04 · Close</text>
+          <text x="690" y="382" text-anchor="middle" class="t-mono">1–2 closes / тижд</text>
+          <text x="690" y="402" text-anchor="middle" class="t-sub">TETIANA</text>
+        </g>
+
+        <!-- 5. Delivery (bottom left) -->
+        <g>
+          <rect x="220" y="330" width="220" height="80" class="node-fill-success"/>
+          <text x="330" y="362" text-anchor="middle" class="t-title" style="fill:#7ec9a8">05 · Delivery</text>
+          <text x="330" y="382" text-anchor="middle" class="t-mono">90 днів супроводу</text>
+          <text x="330" y="402" text-anchor="middle" class="t-sub">TETIANA</text>
+        </g>
+
+        <!-- Center label -->
+        <text x="500" y="225" text-anchor="middle" class="t-title t-gold">Замкнений цикл</text>
+        <text x="500" y="248" text-anchor="middle" class="t-mono">кожен закритий клієнт</text>
+        <text x="500" y="266" text-anchor="middle" class="t-mono">генерує 2–3 нових ліди</text>
+
+        <!-- Forward arrows -->
+        <line x1="280" y1="95" x2="720" y2="95" class="arr-gold" marker-end="url(#arr-loop)"/>
+        <line x1="830" y1="140" x2="850" y2="200" class="arr-gold" marker-end="url(#arr-loop)"/>
+        <line x1="800" y1="280" x2="740" y2="330" class="arr-gold" marker-end="url(#arr-loop)"/>
+        <line x1="600" y1="370" x2="440" y2="370" class="arr-gold" marker-end="url(#arr-loop)"/>
+
+        <!-- Feedback loop (dashed, delivery → content) -->
+        <path d="M 220 360 Q 30 360 30 200 Q 30 80 60 80" class="arr-dashed" marker-end="url(#arr-loop-dash)"/>
+        <text x="80" y="200" class="t-mono t-gold">Feedback loop</text>
+        <text x="80" y="220" class="t-mono">кейси + reference</text>
+        <text x="80" y="240" class="t-mono">→ паливо для контенту</text>
+      </svg>
+    </div>
+
+    <div class="prose">
+      <p>На місяць 1 цього циклу ще немає. Перший клієнт завершить програму через 90 днів — тобто feedback loop активується приблизно в <strong>серпні 2026</strong>. До того часу паливо для контенту приходить з поточної клінічної практики Tetiana, не з кейсів.</p>
+      <p>Це нормально. Місяць 1 — це <em>побудова системи</em>. Місяць 4 — це момент, коли система починає годувати сама себе.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout__label">Як зрозуміти, що система працює</div>
+      <p class="callout__text">Не за виторгом. За кількістю <strong>теплих лідів</strong>, які приходять <em>без</em> вашої прямої роботи. Якщо у вересні 2026 у вас 5 рекомендацій без жодного outreach — система живе. Якщо 0 — десь розрив, шукаємо де.</p>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <p class="sig">Цей документ — не план продажів. Це опис системи, яка повинна жити навіть тоді, коли ви двоє втомлені.</p>
+    <div class="meta-line">
+      <span>Vzaiemodiia</span>
+      <span>·</span>
+      <span>Operational Manual v1.0</span>
+      <span>·</span>
+      <span>Травень 2026</span>
+    </div>
+  </footer>
+
+</div>
+
 </body>
 </html>
